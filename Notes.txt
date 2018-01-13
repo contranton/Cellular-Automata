@@ -1,0 +1,44 @@
+
+* Tasks
+
+** Inmediate:
+*** DONE Design Classes
+*** DONE Implement graphical system
+
+** Future:
+*** DONE Allow creation of systems with arbitrary cell states
+*** DONE Rule-definition language/system
+    
+
+* Notes
+** Classes:
+*** - Board: ()
+*** - ProtoCell: (possible-states[], rule)
+*** - Cell: (state, neighboring-states[])
+
+Hello there I am testing out the kill ring!
+
+0:00:00 
+
+0:00:03 
+
+0:00:12 Recursion
+(Note: wasn't as useful as once thought)
+
+0:00:41
+
+#+BEGIN_SRC ipython :session
+print("Hello World!")
+#+END_SRC
+
+#+RESULTS:
+: 7
+
+
+
+Ensure GraphicSys dependencies are checked for (board assigned, graphics init'd, etc)
+
+
+
+
+<s
