@@ -3,14 +3,15 @@ import colorsys
 
 from time import sleep
 
+
 class GraphicSys:
-    def __init__(self, dims=(400,400)):
+    def __init__(self, dims=(400, 400)):
 
         self.win_w, self.win_h = dims
 
         # For use with pygame
         self._display = None
-        
+
         self.board = None
         self.colors = {}
 
@@ -29,10 +30,8 @@ class GraphicSys:
             col = colorsys.hsv_to_rgb((state - 1)/_n_states, 1, 1)
             col = [_*255 for _ in col]
             self.colors[state] = col
-        
 
         print("COLORS ASSIGNED: %s" % str(self.colors))
-        
 
     def draw_board(self):
         """
@@ -40,11 +39,11 @@ class GraphicSys:
         """
 
         self._display.fill((50, 50, 50))
-        
+
         if self.board is None:
             print("Must assign a board first")
             return
-        
+
         for cell in self.board.iter_cells():
             _state = cell.current_state
             pg.draw.rect(self._display,
@@ -53,7 +52,7 @@ class GraphicSys:
                           self.cell_y_size*cell.coords[1],
                           self.cell_x_size,
                           self.cell_y_size
-                         ))
+                          ))
         pg.display.flip()
 
     def initialize(self):
