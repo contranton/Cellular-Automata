@@ -7,6 +7,7 @@ import re
 
 from collections import defaultdict
 
+
 class CellConfig:
     """Define possible states and ruleset"""
 
@@ -18,7 +19,7 @@ class CellConfig:
         self._possible_states = {}
         self._rules = {}
         self._switching_rules = {}
-        
+
     @property
     def possible_states(self):
         """Return list of possible numerical states for a cell"""
@@ -35,14 +36,13 @@ class CellConfig:
     def possible_states(self):
         self._possible_states = {}
 
-
     @property
     def rules(self):
         """
         Tuple with state-change rules A 4-tuple (rule) defines, for
         each state [0], the number of neighbors [2] of some state
         [1] so that the cell changes to the specified state [3].
-       
+
         In the case of conflicts, i.e. when a cell surrounded by 2
         cells of different states has a rule for both of these
         cases, the behavior is governed by the ALLOW_CONFLICTS
@@ -51,7 +51,7 @@ class CellConfig:
         states and rules with relatively large numbers until a more
         the rule is deemed invalid. To avoid this, begin with a few
         robust rule system is in place.
-        
+
         Example:
         Game of life:
         "0:1(234)1,1:1(5678)0" becomes:
@@ -83,7 +83,8 @@ class CellConfig:
         if not self.__validate_switching_rulestring(rulestring):
             raise Exception("Invalid Switching Rule")
         else:
-            self._switching_rules = self.__parse_switching_rulestring(rulestring)
+            self._switching_rules = self.__parse_switching_rulestring(
+                rulestring)
 
     def __get_possible_states_string(self):
         """
@@ -92,9 +93,9 @@ class CellConfig:
         with the rule validators
         """
         s_ = "".join(["%d"]*len(self.possible_states)) % self.possible_states
-        s_ = "[%s]"%s_
+        s_ = "[%s]" % s_
         return s_
-            
+
     def __validate_states(self, state_dict):
         """Ensures state-dict follows the 'int: String' format"""
         for key in state_dict.keys():
@@ -106,7 +107,7 @@ class CellConfig:
                 return False
 
         return True
-    
+
     def __validate_rulestring(self, rulestring):
         """Ensures rule-set follows valid format and that it uses the states
         previously defined.
@@ -140,8 +141,7 @@ class CellConfig:
             return False
 
         return True
-        
-    
+
     def __parse_rulestring(self, rulestring):
         ruleset = {}
         rules = rulestring.split(",")
@@ -153,7 +153,8 @@ class CellConfig:
             counts = [int(i) for i in counts]
 
             if init_state not in ruleset:
-                ruleset[init_state] = {neighb_state: (set(counts), final_state)}
+                ruleset[init_state] = {
+                    neighb_state: (set(counts), final_state)}
             else:
                 ruleset[init_state][neighb_state] = (set(counts), final_state)
 
@@ -166,20 +167,24 @@ class CellConfig:
             init_state = int(r[0])
             final_state = int(r[2])
             probability = float(r[r.find("(") + 1:r.find(")")])
-                                       
+
             sw_ruleset[init_state] = (final_state, probability)
         return sw_ruleset
+
 
 class Cell():
     """
     Stores position and state
     """
+
     def __init__(self, state, coords):
         self._state = None
         self.current_state = state
         self.coords = coords
 
         self.is_edge = False
+
+        self.neighbors = defaultdict(int)
 
     @property
     def current_state(self):
@@ -190,4 +195,6 @@ class Cell():
     def current_state(self, state):
         self._state = state
 
-
+    def reset_neighbors(self):
+        for i in self.neighbors:
+            self.neighbors[i] = 0

@@ -139,10 +139,11 @@ class Board:
                   self.cells[i+1, j+1])
         neighs = (i.current_state for i in neighs)
 
-        counts = defaultdict(int)
+        cell = self.cells[coord]
+        cell.reset_neighbors()
         for i in neighs:
-            counts[i] += 1
-        return counts
+            cell.neighbors[i] += 1
+        return cell.neighbors
 
     def run(self, graphics, pause=0):
         """Simulation loop. Check for events and updates cells"""
