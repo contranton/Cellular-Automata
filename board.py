@@ -95,8 +95,6 @@ class Board:
 
     def update(self):
         """Apply config-rules to update cell states"""
-        new_board = self.copy_board()
-
         for coord, cell in self.cells.items():
             if cell.is_edge:
                 continue
@@ -110,7 +108,7 @@ class Board:
                     # Check if neighbor rule can be applied
                     if neigh_state in rules and count in rules[neigh_state][0]:
                         # Apply the rule
-                        new_board.cells[coord].current_state = rules[neigh_state][1]
+                        cell.next_state = rules[neigh_state][1]
 
             except KeyError:
                 pass
@@ -120,12 +118,12 @@ class Board:
                 sw_rule = self.config.switching_rules[cell.current_state]
 
                 if random() < sw_rule[1]:
-                    new_board.cells[coord].current_state = sw_rule[0]
+                    cell.next_state = sw_rule[0]
 
             except KeyError:
                 continue
 
-        self.replace_board(new_board)
+        self.update_cell_states()
 
     def acquire_neighbor_info(self, coord):
         i, j = coord
@@ -144,6 +142,12 @@ class Board:
         for i in neighs:
             cell.neighbors[i] += 1
         return cell.neighbors
+
+    def update_cell_states(self):
+        for cell in self.cells.values():
+            if not cell.next_state:
+                cell.current_state = cell.next_state
+            cell.next_state = None
 
     def run(self, graphics, pause=0):
         """Simulation loop. Check for events and updates cells"""

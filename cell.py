@@ -180,6 +180,7 @@ class Cell():
     def __init__(self, state, coords):
         self._state = None
         self.current_state = state
+        self.next_state = None
         self.coords = coords
 
         self.is_edge = False
